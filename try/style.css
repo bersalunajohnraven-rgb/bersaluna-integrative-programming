@@ -170,7 +170,7 @@ nav ul li a:hover {
     color: #555;
 }
 
-/* PRICE BADGE (OPTIONAL) */
+/* PRICE BADGE */
 .price {
     position: absolute;
     top: 12px;
@@ -210,6 +210,7 @@ footer {
     font-size: 0.9rem;
 }
 
+/* RESPONSIVE */
 @media (max-width: 768px) {
     .content h1 {
         font-size: 2.3rem;
