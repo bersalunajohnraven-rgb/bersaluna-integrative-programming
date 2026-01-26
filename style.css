@@ -5,6 +5,12 @@
   --light: #f8f9fa;
   --shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
 }
+html,
+body {
+  height: 100%; /* make body and html full height */
+  margin: 0;
+  padding: 0;
+}
 
 /* GLOBAL */
 * {
@@ -217,6 +223,14 @@ footer {
   justify-content: center;
 }
 
+/* LOGIN / SIGNUP HEADINGS */
+.login-section h2 {
+  font-weight: 800; /* makes it bold */
+  font-size: 2rem; /* optional: adjust size */
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
 .login-card {
   max-width: 400px;
   margin: auto;
@@ -272,4 +286,20 @@ footer {
   nav ul {
     gap: 1rem;
   }
+}
+/* LOGIN / SIGNUP FULLSCREEN BACKGROUND */
+.login-section {
+  min-height: 100%; /* fill entire viewport */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)),
+    url("https://images.unsplash.com/photo-1542838132-92c53300491e") no-repeat
+      center center/cover;
+
+  color: white;
+  padding: 2rem;
 }
