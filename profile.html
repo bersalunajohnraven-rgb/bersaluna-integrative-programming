@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile | CJ4 Grocery Store</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <nav>
+        <div class="logo">CJ4 Grocery Store</div>
+        <ul>
+          <!-- Required navigation -->
+          <li><a href="index.html">Home</a></li>
+          <li><a href="settings.html">Settings</a></li>
+          <li><a href="login.html">Logout</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <section class="profile-section">
+      <div class="profile-card">
+        <div class="profile-header">
+          <img src="https://via.placeholder.com/120" alt="Profile Picture" class="profile-pic" />
+          <h2>John Raven Bersaluna</h2>
+          <p>Premium Member</p>
+        </div>
+
+        <div class="profile-details">
+          <div class="detail-item">
+            <label>Email:</label>
+            <span>john.raven@example.com</span>
+          </div>
+          <div class="detail-item">
+            <label>Phone:</label>
+            <span>+1 (555) 123-4567</span>
+          </div>
+          <div class="detail-item">
+            <label>Address:</label>
+            <span>123 Main St, City, State 12345</span>
+          </div>
+          <div class="detail-item">
+            <label>Member Since:</label>
+            <span>January 2023</span>
+          </div>
+        </div>
+
+        <div class="profile-actions">
+          <!-- Settings navigation -->
+          <button class="btn-primary" onclick="window.location.href='settings.html'">Go to Settings</button>
+          <!-- Back to Home navigation -->
+          <button class="btn-secondary" onclick="window.location.href='index.html'">Back to Home</button>
+          <!-- Logout navigation -->
+          <button class="btn-secondary" onclick="window.location.href='login.html'">Logout</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p>&copy; 2025 CJ4 Grocery Store. All rights reserved.</p>
+    </footer>
+  </body>
+</html>
