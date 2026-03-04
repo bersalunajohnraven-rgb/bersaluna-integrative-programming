@@ -10,6 +10,7 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
     />
   </head>
+<script src="script.js"></script>
 
   <body class="auth-page">
     <header>
@@ -25,14 +26,18 @@
     <section class="products login-section">
       <h2>Login</h2>
 
-      <form class="login-card">
-        <input type="email" placeholder="Email" required />
-        <input type="password" placeholder="Password" required />
+      <form class="login-card" id="loginForm">
+  <input type="email" placeholder="Email" required />
+  <input type="password" placeholder="Password" required />
+  <button type="submit" class="btn-primary">
+    <i class="fas fa-sign-in-alt"></i> Login
+  </button>
+  <p>
+    Don’t have an account? <a href="signup.html">Sign Up</a>
+  </p>
+</form>
 
-        <!-- This is the important change -->
-        <a href="profile.html" class="btn-primary">
-          <i class="fas fa-sign-in-alt"></i> Login
-        </a>
+<script src="script.js"></script>
 
         <p>
           Don’t have an account?
