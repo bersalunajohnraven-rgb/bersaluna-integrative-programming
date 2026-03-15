@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manage Users</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+<nav>
+<div class="logo">CJ4 Admin</div>
+<ul>
+<li><a href="admin.html">Dashboard</a></li>
+<li><a href="login.html" id="logoutNav">Logout</a></li>
+</ul>
+</nav>
+</header>
+
+<section class="products">
+
+<h2>Manage Users</h2>
+
+<table id="usersTable" border="1" style="margin:auto; width:70%; background:white;">
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Email</th>
+<th>Role</th>
+<th>Action</th>
+</tr>
+</table>
+
+<br><br>
+
+<h3>Add User</h3>
+
+<form id="addUserForm" style="max-width:400px;margin:auto;">
+<input type="text" id="name" placeholder="Name" required><br><br>
+<input type="email" id="email" placeholder="Email" required><br><br>
+<input type="text" id="role" placeholder="Role (user/admin)" required><br><br>
+<button type="submit" class="btn-primary">Add User</button>
+</form>
+
+</section>
+
+<script>
+// Initialize default admin if not present
+let users = JSON.parse(localStorage.getItem("users")) || [];
+if (!users.some(u => u.email === "admin@cj4.com")) {
+    users.unshift({
+        id: 1,
+        name: "Administrator",
+        email: "admin@cj4.com",
+        password: "admin123",
+        role: "admin"
+    });
+    localStorage.setItem("users", JSON.stringify(users));
+}
+
+// Function to render users table
+function renderUsers() {
+    const table = document.getElementById("usersTable");
+    table.innerHTML = `<tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Action</th>
+    </tr>`;
+
+    users.forEach((user, index) => {
+        const row = table.insertRow();
+        row.innerHTML = `
+            <td>${user.id}</td>
+            <td>${user.name}</td>
+            <td>${user.email}</td>
+            <td>${user.role}</td>
+            <td>
+                <button onclick="deleteUser(${index})">Delete</button>
+            </td>
+        `;
+    });
+}
+
+// Delete user
+function deleteUser(index) {
+    if (users[index].role === "admin") {
+        alert("Cannot delete the default admin!");
+        return;
+    }
+    users.splice(index, 1);
+    localStorage.setItem("users", JSON.stringify(users));
+    renderUsers();
+}
+
+// Add new user/admin
+document.getElementById("addUserForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const roleInput = document.getElementById("role").value.trim().toLowerCase();
+    const role = roleInput === "admin" ? "admin" : "user";
+
+    if (users.some(u => u.email === email)) {
+        alert("Email already exists!");
+        return;
+    }
+
+    const newUser = {
+        id: users.length + 1,
+        name: name,
+        email: email,
+        password: "123456", // default password
+        role: role
+    };
+
+    users.push(newUser);
+    localStorage.setItem("users", JSON.stringify(users));
+    renderUsers();
+    e.target.reset();
+});
+
+// Logout link
+document.getElementById("logoutNav").addEventListener("click", function(e){
+    e.preventDefault();
+    localStorage.setItem("isLoggedIn", "false");
+    localStorage.removeItem("currentUser");
+    alert("Logged out successfully!");
+    window.location.href = "login.html";
+});
+
+// Initial table render
+renderUsers();
+</script>
+
+<footer>
+<p>&copy; 2025 CJ4 Grocery Store</p>
+</footer>
+
+</body>
+</html>
