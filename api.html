@@ -1,277 +1,191 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Country Explorer</title>
-    <style>
-      /* ----- Body & Background ----- */
-      body {
-        font-family: "Segoe UI", sans-serif;
-        margin: 0;
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: linear-gradient(-45deg, #667eea, #764ba2, #6dd5ed, #2193b0);
-        background-size: 400% 400%;
-        animation: gradientBG 12s ease infinite;
-      }
-      @keyframes gradientBG {
-        0% {
-          background-position: 0% 50%;
-        }
-        50% {
-          background-position: 100% 50%;
-        }
-        100% {
-          background-position: 0% 50%;
-        }
-      }
+<head>
+<meta charset="UTF-8">
+<title>Country Explorer</title>
 
-      /* ----- Container ----- */
-      .container {
-        background: rgba(255, 255, 255, 0.9);
-        padding: 30px;
-        border-radius: 15px;
-        width: 450px;
-        text-align: center;
-        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
-        backdrop-filter: blur(10px);
-      }
+<style>
+body {
+  font-family: "Segoe UI", sans-serif;
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(-45deg, #667eea, #764ba2, #6dd5ed, #2193b0);
+  background-size: 400% 400%;
+  animation: gradientBG 12s ease infinite;
+}
 
-      h1 {
-        margin-bottom: 5px;
-      }
+@keyframes gradientBG {
+  0% {background-position: 0% 50%;}
+  50% {background-position: 100% 50%;}
+  100% {background-position: 0% 50%;}
+}
 
-      .subtitle {
-        color: #555;
-        font-size: 14px;
-      }
+.container {
+  background: rgba(255,255,255,0.95);
+  padding: 30px;
+  border-radius: 15px;
+  width: 450px;
+  text-align: center;
+}
 
-      /* ----- Search Box ----- */
-      .search-box {
-        margin-top: 20px;
-      }
+input {
+  padding: 10px;
+  width: 65%;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
 
-      input {
-        padding: 10px;
-        width: 65%;
-        border-radius: 8px;
-        border: 1px solid #ccc;
-        outline: none;
-        transition: 0.3s;
-      }
+button {
+  padding: 10px;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
 
-      input:focus {
-        border-color: #667eea;
-        box-shadow: 0 0 5px rgba(102, 126, 234, 0.5);
-      }
+.view-btn {
+  display: block;
+  margin-top: 15px;
+  padding: 12px;
+  background: #764ba2;
+  color: white;
+  border-radius: 10px;
+  text-decoration: none;
+}
 
-      button {
-        padding: 10px 15px;
-        border: none;
-        background: #667eea;
-        color: white;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: 0.3s;
-      }
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  margin-top: 20px;
+}
 
-      button:hover {
-        background: #4f63d2;
-        transform: scale(1.05);
-      }
+.flag {
+  width: 120px;
+  margin: 10px 0;
+}
 
-      #result {
-        margin-top: 20px;
-      }
+.info {
+  background: #f4f6ff;
+  padding: 8px;
+  border-radius: 8px;
+  margin: 5px 0;
+}
 
-      /* ----- Card & Info ----- */
-      .card {
-        background: white;
-        padding: 20px;
-        border-radius: 12px;
-        animation: fadeIn 0.7s ease;
-      }
+.save-btn {
+  margin-top: 10px;
+  width: 100%;
+  padding: 12px;
+  background: #28a745;
+  color: white;
+  border-radius: 10px;
+  border: none;
+}
 
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
+.spinner {
+  border: 4px solid #eee;
+  border-top: 4px solid #667eea;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+  margin: auto;
+}
 
-      .country-title {
-        text-align: center;
-        margin-bottom: 10px;
-      }
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
 
-      .flag {
-        width: 130px;
-        display: block;
-        margin: auto;
-        margin-bottom: 15px;
-        transition: 0.3s;
-      }
+.error { color: red; }
+</style>
+</head>
 
-      .flag:hover {
-        transform: scale(1.1);
-      }
+<body>
 
-      .info-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-        margin-top: 10px;
-      }
+<div class="container">
+  <h1>🌍 Country Explorer</h1>
 
-      .info-box {
-        background: #f4f6ff;
-        padding: 10px;
-        border-radius: 10px;
-        text-align: center;
-        transition: 0.3s;
-      }
+  <input type="text" id="countryInput" placeholder="Enter country">
+  <button onclick="searchCountry()">Search</button>
 
-      .info-box:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-      }
+  <a href="saved.html" class="view-btn">📁 View Saved</a>
 
-      .icon {
-        font-size: 22px;
-        display: block;
-        margin-bottom: 5px;
-      }
+  <div id="result"></div>
+</div>
 
-      .info-box p {
-        margin: 3px 0;
-        font-size: 14px;
-      }
+<script>
+function searchCountry() {
+  const country = document.getElementById("countryInput").value.trim();
+  const result = document.getElementById("result");
 
-      .map-btn {
-        display: block;
-        text-align: center;
-        margin-top: 12px;
-        padding: 10px;
-        background: #764ba2;
-        color: white;
-        border-radius: 8px;
-        text-decoration: none;
-        transition: 0.3s;
-      }
+  if (!country) {
+    result.innerHTML = '<p class="error">Enter a country</p>';
+    return;
+  }
 
-      .map-btn:hover {
-        background: #5b3585;
-      }
+  result.innerHTML = '<div class="spinner"></div>';
 
-      /* ----- Spinner & Error ----- */
-      .spinner {
-        border: 4px solid #eee;
-        border-top: 4px solid #667eea;
-        border-radius: 50%;
-        width: 30px;
-        height: 30px;
-        animation: spin 1s linear infinite;
-        margin: auto;
-      }
+  fetch(`https://restcountries.com/v3.1/name/${country}?fullText=true`)
+    .then(res => {
+      if (!res.ok) throw new Error();
+      return res.json();
+    })
+    .then(data => {
+      const c = data[0];
 
-      @keyframes spin {
-        0% {
-          transform: rotate(0deg);
-        }
-        100% {
-          transform: rotate(360deg);
-        }
-      }
+      const countryData = {
+        name: c.name.common,
+        capital: c.capital ? c.capital[0] : "N/A",
+        population: c.population.toLocaleString(),
+        region: c.region,
+        flag: c.flags.png
+      };
 
-      .error {
-        color: red;
-        text-align: center;
-      }
-    </style>
-  </head>
+      result.innerHTML = `
+        <div class="card">
+          <h2>${countryData.name}</h2>
+          <img class="flag" src="${countryData.flag}">
+          
+          <div class="info">🏛 Capital: ${countryData.capital}</div>
+          <div class="info">🌎 Region: ${countryData.region}</div>
+          <div class="info">👥 Population: ${countryData.population}</div>
 
-  <body>
-    <div class="container">
-      <h1>🌍 Country Explorer</h1>
-      <p class="subtitle">Search countries and explore detailed information</p>
+          <button class="save-btn" onclick='saveCountry(${JSON.stringify(countryData)})'>
+            💾 Save Country
+          </button>
+        </div>
+      `;
+    })
+    .catch(() => {
+      result.innerHTML = '<p class="error">❌ Country not found</p>';
+    });
+}
 
-      <div class="search-box">
-        <input type="text" id="countryInput" placeholder="Enter country name" />
-        <button onclick="searchCountry()">Search</button>
-      </div>
+function saveCountry(country) {
+  let saved = JSON.parse(localStorage.getItem("countries")) || [];
 
-      <div id="result"></div>
-    </div>
+  const exists = saved.some(c => c.name === country.name);
 
-    <script>
-      function searchCountry() {
-        const country = document.getElementById("countryInput").value.trim();
-        const result = document.getElementById("result");
+  if (exists) {
+    alert("⚠️ Already saved!");
+    return;
+  }
 
-        if (country === "") {
-          result.innerHTML =
-            '<p class="error">Please enter a country name.</p>';
-          return;
-        }
+  saved.push(country);
+  localStorage.setItem("countries", JSON.stringify(saved));
 
-        result.innerHTML = '<div class="spinner"></div>';
+  alert("✅ Saved!");
+}
 
-        fetch(`https://restcountries.com/v3.1/name/${country}?fullText=true`)
-          .then((response) => {
-            if (!response.ok) throw new Error("Country not found");
-            return response.json();
-          })
-          .then((data) => {
-            const c = data[0];
-            const name = c.name.common;
-            const capital = c.capital ? c.capital[0] : "N/A";
-            const population = c.population.toLocaleString();
-            const region = c.region;
-            const subregion = c.subregion;
-            const area = c.area.toLocaleString();
-            const flag = c.flags.png;
-            const languages = Object.values(c.languages || {}).join(", ");
-            const currencies = Object.values(c.currencies || {})
-              .map((cur) => cur.name)
-              .join(", ");
-            const timezone = c.timezones[0];
-            const map = c.maps.googleMaps;
+document.getElementById("countryInput")
+  .addEventListener("keypress", e => {
+    if (e.key === "Enter") searchCountry();
+  });
+</script>
 
-            result.innerHTML = `
-          <div class="card">
-            <h2 class="country-title">${name}</h2>
-            <img class="flag" src="${flag}" />
-            <div class="info-grid">
-              <div class="info-box"><span class="icon">🏛</span><p><strong>Capital</strong></p><p>${capital}</p></div>
-              <div class="info-box"><span class="icon">🌎</span><p><strong>Region</strong></p><p>${region}</p></div>
-              <div class="info-box"><span class="icon">📍</span><p><strong>Subregion</strong></p><p>${subregion}</p></div>
-              <div class="info-box"><span class="icon">👥</span><p><strong>Population</strong></p><p>${population}</p></div>
-              <div class="info-box"><span class="icon">📏</span><p><strong>Area</strong></p><p>${area} km²</p></div>
-              <div class="info-box"><span class="icon">🗣</span><p><strong>Languages</strong></p><p>${languages}</p></div>
-              <div class="info-box"><span class="icon">💰</span><p><strong>Currency</strong></p><p>${currencies}</p></div>
-              <div class="info-box"><span class="icon">⏰</span><p><strong>Timezone</strong></p><p>${timezone}</p></div>
-            </div>
-            <a class="map-btn" href="${map}" target="_blank">📍 View on Google Maps</a>
-          </div>`;
-          })
-          .catch((error) => {
-            result.innerHTML =
-              '<p class="error">❌ Country not found. Try again.</p>';
-          });
-      }
-
-      // Allow Enter key to search
-      document
-        .getElementById("countryInput")
-        .addEventListener("keypress", function (e) {
-          if (e.key === "Enter") searchCountry();
-        });
-    </script>
-  </body>
+</body>
 </html>
