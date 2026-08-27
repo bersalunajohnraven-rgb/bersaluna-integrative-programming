@@ -940,3 +940,28 @@ footer {
     font-size: 2rem;
   }
 }
+
+/* ERROR MESSAGES */
+.error-msg {
+  color: #ef4444;
+  font-size: 0.9rem;
+  text-align: center;
+  min-height: 1.2rem;
+  font-weight: 600;
+}
+
+/* PROFILE AVATAR */
+.profile-avatar {
+  font-size: 5rem;
+  color: var(--primary);
+  margin-bottom: 1rem;
+}
+
+.profile-avatar i {
+  font-size: 5rem;
+}
+
+/* AUTH PAGE BODY */
+.auth-page {
+  min-height: 100vh;
+}

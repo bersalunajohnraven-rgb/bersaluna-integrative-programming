@@ -11,12 +11,11 @@
     <header>
       <nav>
         <div class="logo">CJ4 Grocery Store</div>
-        <ul>
+        <ul id="navMenu">
           <li><a href="#home">Home</a></li>
           <li><a href="#products">Products</a></li>
           <li><a href="#about">About</a></li>
           <li><a href="#contact">Contact</a></li>
-          <li><a href="profile.html">Profile</a></li>
           <li><a href="login.html">Login</a></li>
           <li><a href="signup.html">Sign Up</a></li>
         </ul>
@@ -28,7 +27,7 @@
         <h1>Welcome to CJ4 Grocery Store</h1>
         <p>Fresh produce, quality meats, and everyday essentials delivered to your door.</p>
         <button class="btn-primary" onclick="window.location.href='login.html'">Shop Now</button>
-        <button class="btn-secondary">Learn More</button>
+        <button class="btn-secondary" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Learn More</button>
       </div>
     </section>
 
@@ -40,7 +39,7 @@
           <img src="images/fruits.png" alt="Fruits" />
           <h3>Fresh Fruits</h3>
           <p>Juicy and nutritious fruits picked at the peak of ripeness.</p>
-          <button class="btn-add">Shop NoW</button>
+          <button class="btn-add">Shop Now</button>
         </div>
         <div class="product-item">
           <img src="images/quality-meats.png" alt="Quality Meats" />
@@ -71,5 +70,34 @@
     <footer>
       <p>&copy; 2025 CJ4 Grocery Store. All rights reserved.</p>
     </footer>
+
+    <script type="module">
+      import { getCurrentUser, signOutAndRedirect } from "./src/auth.js";
+
+      (async () => {
+      const user = await getCurrentUser();
+      const navMenu = document.getElementById("navMenu");
+
+      if (user) {
+        let navItems = `
+          <li><a href="#home">Home</a></li>
+          <li><a href="#products">Products</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a href="profile.html">Profile</a></li>
+        `;
+        if (user.role === "admin") {
+          navItems += `<li><a href="admin.html">Admin</a></li>`;
+        }
+        navItems += `<li><a href="#" id="navLogout">Logout</a></li>`;
+        navMenu.innerHTML = navItems;
+
+        document.getElementById("navLogout").addEventListener("click", (e) => {
+          e.preventDefault();
+          signOutAndRedirect();
+        });
+      }
+      })();
+    </script>
   </body>
 </html>

@@ -3,27 +3,95 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign Up</title>
-  <!-- Link to your main CSS -->
+  <title>Sign Up | CJ4 Grocery Store</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body>  
-  <section class="login-section">
-    <h2>Create Account</h2>
-    <div class="login-card">
-      <form id="signupForm">
-        <input type="text" name="name" placeholder="Full Name" required>
-        <input type="email" name="email" placeholder="Email" required>
-        <input type="password" name="password" placeholder="Password" required>
-        <input type="password" name="confirmPassword" placeholder="Confirm Password" required>
-        </select>
-        <button type="submit" class="btn-primary">Sign Up</button>
-      </form>
-      <p>Already have an account? <a href="login.html">Login here</a></p>
-    </div>
-  </section>
+<body class="auth-page">
 
-<script src="script.js"></script>
-  <script src="signup.js"></script>
+<header>
+  <nav>
+    <div class="logo">CJ4 Grocery Store</div>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="login.html">Login</a></li>
+    </ul>
+  </nav>
+</header>
+
+<section class="login-section">
+  <h2>Create Account</h2>
+  <div class="login-card">
+    <form id="signupForm">
+      <input type="text" name="name" placeholder="Full Name" required />
+      <input type="email" name="email" placeholder="Email" required />
+      <input type="password" name="password" placeholder="Password (min 6 characters)" required />
+      <input type="password" name="confirmPassword" placeholder="Confirm Password" required />
+      <button type="submit" class="btn-primary">
+        <i class="fas fa-user-plus"></i> Sign Up
+      </button>
+      <p>Already have an account? <a href="login.html">Login here</a></p>
+      <p id="signupError" class="error-msg"></p>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <p>&copy; 2025 CJ4 Grocery Store. All rights reserved.</p>
+</footer>
+
+<script type="module">
+  import { supabase } from "./src/supabaseClient.js";
+
+  const form = document.getElementById("signupForm");
+  const errorEl = document.getElementById("signupError");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    errorEl.textContent = "";
+
+    const name = form.querySelector('input[name="name"]').value.trim();
+    const email = form.querySelector('input[name="email"]').value.trim().toLowerCase();
+    const password = form.querySelector('input[name="password"]').value;
+    const confirmPassword = form.querySelector('input[name="confirmPassword"]').value;
+
+    if (name.length < 3) {
+      errorEl.textContent = "Full name must be at least 3 characters.";
+      return;
+    }
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    if (!emailPattern.test(email)) {
+      errorEl.textContent = "Please enter a valid email address.";
+      return;
+    }
+    if (password.length < 6) {
+      errorEl.textContent = "Password must be at least 6 characters.";
+      return;
+    }
+    if (password !== confirmPassword) {
+      errorEl.textContent = "Passwords do not match.";
+      return;
+    }
+
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { data: { name } },
+    });
+
+    if (error) {
+      errorEl.textContent = error.message || "Sign up failed. Please try again.";
+      return;
+    }
+
+    if (data.user && data.session) {
+      alert("Account created successfully!");
+      window.location.href = "index.html";
+    } else {
+      alert("Account created! Please check your email to confirm, then log in.");
+      window.location.href = "login.html";
+    }
+  });
+</script>
 </body>
 </html>

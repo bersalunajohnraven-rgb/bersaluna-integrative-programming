@@ -5,14 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Profile | CJ4 Grocery Store</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
   <header>
     <nav>
       <div class="logo">CJ4 Grocery Store</div>
       <ul>
+        <li><a href="index.html">Home</a></li>
         <li><a href="settings.html">Settings</a></li>
-        <li><a href="login.html" id="logoutNav">Logout</a></li>
+        <li><a href="#" id="logoutNav">Logout</a></li>
       </ul>
     </nav>
   </header>
@@ -20,9 +22,9 @@
   <section class="profile-section">
     <div class="profile-card">
       <div class="profile-header">
-        <img src="https://via.placeholder.com/120" alt="Profile Picture" class="profile-pic" />
-        <h2 id="profileName">User Name</h2>
-        <p id="profileRole">Role</p>
+        <div class="profile-avatar"><i class="fas fa-user-circle"></i></div>
+        <h2 id="profileName">Loading...</h2>
+        <p id="profileRole"></p>
       </div>
 
       <div class="profile-details">
@@ -32,15 +34,15 @@
         </div>
         <div class="detail-item">
           <label>Phone:</label>
-          <span id="profilePhone">+1 (555) 123-4567</span>
+          <span id="profilePhone">Not set</span>
         </div>
         <div class="detail-item">
           <label>Address:</label>
-          <span id="profileAddress">123 Main St, City, State 12345</span>
+          <span id="profileAddress">Not set</span>
         </div>
         <div class="detail-item">
           <label>Member Since:</label>
-          <span id="profileMemberSince">January 2023</span>
+          <span id="profileMemberSince"></span>
         </div>
       </div>
 
@@ -56,37 +58,36 @@
     <p>&copy; 2025 CJ4 Grocery Store. All rights reserved.</p>
   </footer>
 
-  <script>
-    // Check if user is logged in
-    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  <script type="module">
+    import { getCurrentUser, signOutAndRedirect } from "./src/auth.js";
 
-    if (!currentUser) {
-      alert("You must login first!");
+    (async () => {
+    const user = await getCurrentUser();
+
+    if (!user) {
+      alert("You must log in first.");
       window.location.href = "login.html";
     } else {
-      // Fill profile info dynamically
-      document.getElementById("profileName").textContent = currentUser.name;
-      document.getElementById("profileEmail").textContent = currentUser.email;
-      document.getElementById("profileRole").textContent = currentUser.role;
+      document.getElementById("profileName").textContent = user.name;
+      document.getElementById("profileEmail").textContent = user.email;
+      document.getElementById("profileRole").textContent =
+        user.role.charAt(0).toUpperCase() + user.role.slice(1);
+      document.getElementById("profilePhone").textContent = user.phone || "Not set";
+      document.getElementById("profileAddress").textContent = user.address || "Not set";
+      document.getElementById("profileMemberSince").textContent =
+        new Date(user.created_at).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
     }
 
-    // Logout button
-    document.getElementById("logoutBtn").addEventListener("click", function() {
-      localStorage.setItem("isLoggedIn", "false");
-      localStorage.removeItem("currentUser");
-      alert("Logged out successfully!");
-      window.location.href = "login.html";
-    });
-
-    // Optional: logout link in nav
-    const logoutNav = document.getElementById("logoutNav");
-    logoutNav.addEventListener("click", function(e) {
+    document.getElementById("logoutBtn").addEventListener("click", signOutAndRedirect);
+    document.getElementById("logoutNav").addEventListener("click", (e) => {
       e.preventDefault();
-      localStorage.setItem("isLoggedIn", "false");
-      localStorage.removeItem("currentUser");
-      alert("Logged out successfully!");
-      window.location.href = "login.html";
+      signOutAndRedirect();
     });
+    })();
   </script>
 </body>
 </html>

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Dashboard | CJ4 Grocery</title>
     <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   </head>
 
   <body>
@@ -14,19 +15,48 @@
         <ul>
           <li><a href="manage-users.html">Manage Users</a></li>
           <li><a href="profile.html">Profile</a></li>
-          <li><a href="login.html">Logout</a></li>
+          <li><a href="#" id="logoutNav">Logout</a></li>
         </ul>
       </nav>
     </header>
 
     <section class="products">
       <h2>Admin Dashboard</h2>
-      <p>Welcome Admin</p>
+      <p id="welcomeMsg">Welcome Admin</p>
       <p>Use the menu to manage system data.</p>
+
+      <div class="admin-stats" style="display:flex; gap:2rem; justify-content:center; margin-top:2rem; flex-wrap:wrap;">
+        <div class="product-item" style="cursor:pointer;" onclick="window.location.href='manage-users.html'">
+          <i class="fas fa-users" style="font-size:3rem; color:var(--primary);"></i>
+          <h3 style="margin-top:1rem;">Manage Users</h3>
+          <p>Add, view, and remove user accounts.</p>
+        </div>
+        <div class="product-item" style="cursor:pointer;" onclick="window.location.href='profile.html'">
+          <i class="fas fa-user-cog" style="font-size:3rem; color:var(--secondary);"></i>
+          <h3 style="margin-top:1rem;">My Profile</h3>
+          <p>View and edit your account details.</p>
+        </div>
+      </div>
     </section>
 
     <footer>
       <p>&copy; 2025 CJ4 Grocery Store</p>
     </footer>
+
+    <script type="module">
+      import { requireAdmin, signOutAndRedirect } from "./src/auth.js";
+
+      (async () => {
+      const admin = await requireAdmin();
+      if (admin) {
+        document.getElementById("welcomeMsg").textContent = `Welcome, ${admin.name}`;
+      }
+
+      document.getElementById("logoutNav").addEventListener("click", (e) => {
+        e.preventDefault();
+        signOutAndRedirect();
+      });
+      })();
+    </script>
   </body>
 </html>
